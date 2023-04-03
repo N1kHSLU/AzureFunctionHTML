@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>N1k's Function App Playground</title>
+  <!-- <link rel="stylesheet" href="style.css"> -->
+  <!-- <link rel="icon" href="./favicon.ico" type="image/x-icon"> -->
+</head>
+
+<body>
+  <main>
+    <h1>Willkommen bei Nik's Function App Spielwiese</h1>
+    <h3>In diesem Beispiel habe ich die Aufgabe vom 1.4.2023 als Azure Function App HTML Version implementiert</h3>
+
+    <form id="form">
+      <label for="from">Von:</label>
+      <input type="text" id="from" name="from"><br><br>
+
+      <label for="to">Nach:</label>
+      <input type="text" id="to" name="to"><br><br>
+
+      <label for="departure_time">Abfahrt am:</label>
+      <input type="text" id="departure_time" name="departure_time"><br><br>
+
+      <input type="submit" value="Absenden">
+    </form>
+
+    <div id="api_result"></div>
+  </main>
+  <script>
+    const form = document.querySelector("#form");
+    const apiResult = document.querySelector("#api_result");
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const from = form.elements["from"].value;
+      const to = form.elements["to"].value;
+
+      const apiUrl = `http://transport.opendata.ch/v1/connections?from=${from}&to=${to}&limit=1`;
+
+      fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+          const departureTime = new Date(data.departure_time);
+          const formattedTime = departureTime.toLocaleString();
+          document.querySelector("#departure_time").value = formattedTime;
+          apiResult.textContent = `Abfahrt am: ${formattedTime}`;
+          console.log(formattedTime)
+        })
+        .catch(error => console.log(error));
+    });
+    
+  </script>
+</body>
+
+</html>
