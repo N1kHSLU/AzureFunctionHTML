@@ -131,6 +131,4 @@ dmypy.json
 .python_packages
 
 # VSCode
-.VSCode
 .vscode 
-.vscode/
